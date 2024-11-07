@@ -1,3 +1,6 @@
 **/__pycache__/
 *.tmp
 *.log
+/miniconda3/
+/envs/
+miniconda.exe
