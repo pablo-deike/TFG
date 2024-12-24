@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from training_model import training_model
+from training_model import training_model_SGD
 
 
 def grid_search(x, y):
@@ -23,7 +23,7 @@ def grid_search(x, y):
                 y_train,
                 y_test_slice,
                 has_finished,
-            ) = training_model(
+            ) = training_model_SGD(
                 x, y, data_size=data_size, learning_rate=learning_rate, batch_size=128
             )
             test_loss[a_iter, b_iter] = total_loss_slice.item()

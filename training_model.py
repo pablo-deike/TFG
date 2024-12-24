@@ -1,13 +1,17 @@
 import torch
-import torch.nn as nn
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 from neural_networks.four_layer_nn import FourLayerNN
 from data_loaders import create_dataloaders
 
 
-def training_model(x, y, data_size, learning_rate, batch_size, nepoch):
+def training_model_SGD(
+    x: list,
+    y: list,
+    data_size: float,
+    learning_rate: float,
+    batch_size: int,
+):
     train_loader, test_loader, train_size = create_dataloaders(
         x, y, split_ratio=data_size, batch_size=batch_size
     )
@@ -16,7 +20,6 @@ def training_model(x, y, data_size, learning_rate, batch_size, nepoch):
     criterion = torch.nn.MSELoss(reduction="mean")
     optimizer = torch.optim.SGD(net_slice.parameters(), lr=learning_rate, momentum=0.9)
     dloss = 1
-    i = 0
     nepoch = 0
     net_slice.train()
     hatY = torch.zeros(train_size, 1)
@@ -28,7 +31,6 @@ def training_model(x, y, data_size, learning_rate, batch_size, nepoch):
     )
 
     while dloss > 1e-3 and nepoch < 5000:
-        # for i in range(nepoch):
         for batch_idx, (x_train_slice, y_train_slice) in enumerate(train_loader):
             x_train_slice = x_train_slice.float()
             y_train_slice = y_train_slice.float()
@@ -78,32 +80,32 @@ def training_model(x, y, data_size, learning_rate, batch_size, nepoch):
     )
 
 
-df = pd.read_csv("C:/Users/pablo/Desktop/scripts tfg/data_E.csv")
-list_zn = df[["# Z", "N"]].values.tolist()
-difE = df["difE"].values.tolist()
-x = torch.tensor(list_zn)
-y = torch.tensor(np.abs(difE))
+# df = pd.read_csv("C:/Users/pablo/Desktop/scripts tfg/data_E.csv")
+# list_zn = df[["# Z", "N"]].values.tolist()
+# difE = df["difE"].values.tolist()
+# x = torch.tensor(list_zn)
+# y = torch.tensor(np.abs(difE))
 
-# test_loss, loss, nepoch, hatY, hatY_pred, all_x_train, x_test, all_y_train, y_test= training_model(x,y,data_size=0.8, learning_rate=1e-4,batch_size=128)
+# # test_loss, loss, nepoch, hatY, hatY_pred, all_x_train, x_test, all_y_train, y_test= training_model(x,y,data_size=0.8, learning_rate=1e-4,batch_size=128)
 
-test_loss, loss, nepoch, hatY, hatY_pred, all_x_train, x_test, all_y_train, y_test = (
-    training_model(
-        x, y, data_size=0.8, learning_rate=0.0001, batch_size=128, nepoch=751
-    )
-)
-print("done")
-print(np.sqrt(test_loss.item()), np.sqrt(loss.item()))
-np.savetxt(
-    "difE_sgd_train_with_1e_4_80_no_drop.csv",
-    torch.column_stack((all_x_train, all_y_train, hatY)).detach().numpy(),
-    delimiter=",",
-    header="Z,N,difE real, difE pred",
-    comments="",
-)
-np.savetxt(
-    "difE_sgd_test_with_1e_4_80_no_drop.csv",
-    torch.column_stack((x_test, y_test, hatY_pred)).detach().numpy(),
-    delimiter=",",
-    header="Z,N,difE real, difE pred",
-    comments="",
-)
+# test_loss, loss, nepoch, hatY, hatY_pred, all_x_train, x_test, all_y_train, y_test = (
+#     training_model(
+#         x, y, data_size=0.8, learning_rate=0.0001, batch_size=128, nepoch=751
+#     )
+# )
+# print("done")
+# print(np.sqrt(test_loss.item()), np.sqrt(loss.item()))
+# np.savetxt(
+#     "difE_sgd_train_with_1e_4_80_no_drop.csv",
+#     torch.column_stack((all_x_train, all_y_train, hatY)).detach().numpy(),
+#     delimiter=",",
+#     header="Z,N,difE real, difE pred",
+#     comments="",
+# )
+# np.savetxt(
+#     "difE_sgd_test_with_1e_4_80_no_drop.csv",
+#     torch.column_stack((x_test, y_test, hatY_pred)).detach().numpy(),
+#     delimiter=",",
+#     header="Z,N,difE real, difE pred",
+#     comments="",
+# )
