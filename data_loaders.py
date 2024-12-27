@@ -2,7 +2,7 @@ from torch.utils.data import TensorDataset, DataLoader
 import torch
 
 
-def create_dataloaders(x, y, split_ratio, batch_size):
+def create_dataloaders(x, y, split_ratio):
     dataset = TensorDataset(x, y)
     train_size = int(len(dataset) * split_ratio)
     test_size = len(dataset) - train_size
